@@ -14,7 +14,7 @@ let patients = [
 
 let doctors = [
     { id: 1, name: "Dr. Peter Kamau", specialization: "Cardiology", phone: "0700111222", days: "Mon, Wed, Fri" },
-    { id: 2, name: "Dr. Faith Mwangi", specialization: "Pediatrics", phone: "0700333444", days: "Tue, Thu" },
+    { id: 2, name: "Dr. Maximilla Aleyo", specialization: "Pediatrics", phone: "0700333444", days: "Tue, Thu" },
     { id: 3, name: "Dr. Ann kiprop", specialization: "Nurse", phone: "0785642323", days:"Wed,Fri"},
 ];
 
