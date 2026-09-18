@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}New Bill - Wellview Clinic{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Create bill</h1>
+</div>
+
+<div class="card">
+    <form method="POST">
+        <div class="form-grid">
+            <div class="field full-width">
+                <label for="patient_id">Patient</label>
+                <select id="patient_id" name="patient_id" required>
+                    <option value="">Select patient...</option>
+                    {% for p in patients %}
+                    <option value="{{ p.id }}">{{ p.full_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="field full-width">
+                <label for="description">Description</label>
+                <input type="text" id="description" name="description" required placeholder="e.g. Consultation fee">
+            </div>
+            <div class="field">
+                <label for="amount">Amount (KES)</label>
+                <input type="number" id="amount" name="amount" step="0.01" min="0" required>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Create bill</button>
+            <a href="{{ url_for('billing') }}" class="btn btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

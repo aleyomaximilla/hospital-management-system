@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Doctor - Wellview Clinic</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="brand">Wellview <span>Clinic</span></div>
+            <nav>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="patients.html">Patients</a>
+                <a href="doctors.html" class="active">Doctors</a>
+                <a href="appointments.html">Appointments</a>
+                <a href="billing.html">Billing</a>
+            </nav>
+            <div class="user-box">
+                Signed in as<br>
+                <strong>Maximilla</strong>
+                <div class="role-tag">admin</div>
+            </div>
+            <a href="index.html" class="logout-link">Log out</a>
+        </aside>
+
+        <main class="content">
+            <div class="page-header">
+                <h1>Add doctor</h1>
+            </div>
+
+            <div class="card">
+                <form onsubmit="handleDoctorFormSubmit(event)">
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="full_name">Full name</label>
+                            <input type="text" id="full_name" name="full_name" required>
+                        </div>
+                        <div class="field">
+                            <label for="specialization">Specialization</label>
+                            <input type="text" id="specialization" name="specialization" required placeholder="e.g. Cardiology">
+                        </div>
+                        <div class="field">
+                            <label for="phone">Phone</label>
+                            <input type="text" id="phone" name="phone">
+                        </div>
+                        <div class="field">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email">
+                        </div>
+                        <div class="field full-width">
+                            <label for="available_days">Available days</label>
+                            <input type="text" id="available_days" name="available_days" placeholder="e.g. Mon, Wed, Fri">
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Add doctor</button>
+                        <a href="doctors.html" class="btn btn-outline">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>

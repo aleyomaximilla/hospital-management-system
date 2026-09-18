@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - Wellview Clinic{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Dashboard</h1>
+</div>
+
+<div class="stat-grid">
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.patients }}</div>
+        <div class="stat-label">Registered patients</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.doctors }}</div>
+        <div class="stat-label">Doctors on staff</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.appointments_today }}</div>
+        <div class="stat-label">Appointments today</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.unpaid_bills }}</div>
+        <div class="stat-label">Unpaid bills</div>
+    </div>
+</div>
+
+<h2>Upcoming appointments</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Patient</th>
+            <th>Doctor</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for a in upcoming %}
+        <tr>
+            <td>{{ a.appointment_date }}</td>
+            <td>{{ a.appointment_time }}</td>
+            <td>{{ a.patient_name }}</td>
+            <td>{{ a.doctor_name }}</td>
+            <td><span class="badge badge-{{ a.status.lower() }}">{{ a.status }}</span></td>
+        </tr>
+        {% else %}
+        <tr class="empty-row"><td colspan="5">No upcoming appointments.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

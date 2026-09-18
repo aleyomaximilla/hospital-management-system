@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Billing - Wellview Clinic{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Billing</h1>
+    {% if session.get('role') in ['admin', 'receptionist'] %}
+    <a href="{{ url_for('add_bill') }}" class="btn btn-primary">+ New bill</a>
+    {% endif %}
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Patient</th>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Issued</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for b in bills %}
+        <tr>
+            <td>{{ b.patient_name }}</td>
+            <td>{{ b.description }}</td>
+            <td>KES {{ '{:,.2f}'.format(b.amount) }}</td>
+            <td>{{ b.issued_at.strftime('%d %b %Y') }}</td>
+            <td><span class="badge badge-{{ b.status.lower() }}">{{ b.status }}</span></td>
+            <td>
+                {% if b.status == 'Unpaid' and session.get('role') in ['admin', 'receptionist'] %}
+                <form method="POST" action="{{ url_for('mark_bill_paid', bill_id=b.id) }}" style="display:inline">
+                    <button type="submit" class="btn btn-outline btn-sm">Mark paid</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+        <tr class="empty-row"><td colspan="6">No bills issued yet.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

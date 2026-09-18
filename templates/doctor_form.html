@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Add Doctor - Wellview Clinic{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Add doctor</h1>
+</div>
+
+<div class="card">
+    <form method="POST">
+        <div class="form-grid">
+            <div class="field">
+                <label for="full_name">Full name</label>
+                <input type="text" id="full_name" name="full_name" required>
+            </div>
+            <div class="field">
+                <label for="specialization">Specialization</label>
+                <input type="text" id="specialization" name="specialization" required placeholder="e.g. Cardiology">
+            </div>
+            <div class="field">
+                <label for="phone">Phone</label>
+                <input type="text" id="phone" name="phone">
+            </div>
+            <div class="field">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email">
+            </div>
+            <div class="field full-width">
+                <label for="available_days">Available days</label>
+                <input type="text" id="available_days" name="available_days" placeholder="e.g. Mon, Wed, Fri">
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Add doctor</button>
+            <a href="{{ url_for('doctors') }}" class="btn btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
