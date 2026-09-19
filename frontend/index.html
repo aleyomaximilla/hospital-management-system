@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in - Wellview Clinic</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="auth-screen">
+        <div class="auth-box">
+            <div class="brand">Middledown <span>Dispensary</span></div>
+            <div class="subtitle">Hospital Management System</div>
+
+            <form id="login-form" onsubmit="handleLoginSubmit(event)">
+                <div class="field">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required autofocus placeholder="[email protected]">
+                </div>
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required placeholder="••••••••">
+                </div>
+                <button type="submit" id="submit-btn" class="btn btn-primary">Log in</button>
+            </form>
+
+            <div class="auth-switch">
+                No account yet? <a href="register.html">Register here</a>
+            </div>
+
+            <div style="margin-top: 20px; padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 0.85rem; color: #475569;">
+                <strong>Demo Credentials:</strong><br>
+                Admin: <code>[email protected]</code> / <code>admin123</code><br>
+                Doctor: <code>[email protected]</code> / <code>admin123</code>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script>
+        async function handleLoginSubmit(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const btn = document.getElementById('submit-btn');
+
+            btn.disabled = true;
+            btn.textContent = 'Logging in...';
+
+            try {
+                const res = await apiRequest('/auth/login', 'POST', { email, password });
+                if (res.token) {
+                    localStorage.setItem('hms_token', res.token);
+                    localStorage.setItem('hms_user', JSON.stringify(res.user));
+                    showFlash('Login successful! Redirecting...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 500);
+                }
+            } catch (err) {
+                showFlash(err.message || 'Login failed. Please check credentials.', 'error');
+                btn.disabled = false;
+                btn.textContent = 'Log in';
+            }
+        }
+    </script>
+</body>
+</html>

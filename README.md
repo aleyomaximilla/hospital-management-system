@@ -1,99 +1,112 @@
-# Wellview Clinic — Hospital Management System
+# Hospital Management System (HMS)
 
-A learning-project HMS built with:
-- **Frontend:** HTML, CSS, JavaScript (server-rendered via Jinja2 templates)
-- **Backend:** Python (Flask)
-- **Database:** MySQL
+A full-stack Hospital Management System built with:
+- **Frontend:** Vanilla HTML5, CSS3, JavaScript (responsive UI and interactive SPA-like tables)
+- **Backend:** Node.js & Express.js (modular REST API, JWT authentication, parameterized MySQL queries)
+- **Database:** MySQL Server 26.7 (`hms_db`)
+
+---
 
 ## Features
 
-- Login / registration with role-based access control (Admin, Doctor, Receptionist)
-- Patient registration and records
-- Doctor management
-- Appointment booking and status tracking
-- Billing
-- Audit log of sensitive actions (who did what, when)
+- **Role-Based Access Control (RBAC):** Admin, Doctor, and Receptionist permissions.
+- **Patient Management:** Complete records with blood groups, contact info, and medical histories.
+- **Doctor Management:** Specialty directory and availability tracking.
+- **Appointment Scheduling:** Bookings with real-time status updates (Scheduled, Completed, Cancelled).
+- **Billing & Invoicing:** Generate clinic bills, track amounts (KES), and settle payment statuses (Paid/Unpaid).
+- **Audit Logging:** Logs user actions (logins, record modifications) directly into the `audit_log` table.
+- **Security:** Bcrypt password hashing, JWT stateless authorization, and parameterized SQL prevention against SQL injection.
 
-## Project structure
+---
+
+## Project Structure
 
 ```
-hms/
-├── app.py                # Flask app + all routes
-├── config.py              # App configuration (DB credentials, secret key)
-├── db.py                  # MySQL connection + safe query helper
-├── create_admin.py        # One-time script to create the first admin login
-├── requirements.txt
+hospital-management-system/
+├── frontend/                    # Client-side UI
+│   ├── css/
+│   │   └── style.css            # Stylesheet & responsive layout
+│   ├── js/
+│   │   ├── api.js               # Centralized REST API client & session manager
+│   │   └── main.js              # Live table rendering & form interaction
+│   ├── index.html               # Login page
+│   ├── register.html            # User registration page
+│   ├── dashboard.html           # Main staff dashboard
+│   ├── patients.html            # Patient records table
+│   ├── patient-form.html        # Register / edit patient form
+│   ├── doctors.html             # Doctors roster table
+│   ├── doctor-form.html         # Add doctor form
+│   ├── appointments.html        # Scheduled appointments table
+│   ├── appointment-form.html    # Book appointment form
+│   ├── billing.html             # Billing and invoices table
+│   └── bill-form.html           # Generate bill form
+│
+├── backend/                     # Node.js + Express REST API
+│   ├── config/
+│   │   └── db.js                # MySQL2 connection pool
+│   ├── controllers/             # Controller business logic
+│   │   ├── authController.js
+│   │   ├── patientController.js
+│   │   ├── doctorController.js
+│   │   ├── appointmentController.js
+│   │   └── billingController.js
+│   ├── middleware/              # JWT auth and RBAC middleware
+│   │   └── authMiddleware.js
+│   ├── routes/                  # Express route definitions
+│   ├── utils/                   # Audit logging utility
+│   ├── .env                     # Database credentials & port configuration
+│   ├── .env.example             # Environment template
+│   ├── package.json             # NPM dependencies & scripts
+│   └── server.js                # Server entry point & static file hosting
+│
 ├── database/
-│   └── schema.sql         # Run this to create the database and tables
-├── static/
-│   ├── css/style.css
-│   └── js/main.js
-└── templates/             # All HTML pages (Jinja2)
+│   ├── schema.sql               # MySQL database & tables creation script
+│   └── seed.sql                 # Default seed data and initial accounts
+│
+└── legacy_python/               # Archived Python Flask prototype
 ```
 
-## Setup instructions
+---
 
-### 1. Install MySQL
-Make sure MySQL Server is installed and running locally, and you know your root username/password.
+## Quick Start & Running Instructions
 
-### 2. Create the database
+### 1. Start the Server
+Open a terminal in the `backend/` directory and run:
 ```bash
-mysql -u root -p < database/schema.sql
+npm start
 ```
-This creates the `hms_db` database and all tables.
+*(Or run with hot-reloading during development: `npm run dev`)*
 
-### 3. Set up a Python virtual environment
-```bash
-cd hms
-python -m venv venv
-source venv/bin/activate      # on Windows: venv\Scripts\activate
-pip install -r requirements.txt
+The server will initialize on:
+```
+http://localhost:5000
 ```
 
-### 4. Configure your database credentials
-Open `config.py` and update the MySQL settings, or set environment variables:
-```bash
-export MYSQL_USER=root
-export MYSQL_PASSWORD=your_password
-export MYSQL_DB=hms_db
-export SECRET_KEY=some-random-string
+### 2. Access the Application
+Open your browser and navigate to:
+```
+http://localhost:5000
 ```
 
-### 5. Create your first admin account
-```bash
-python create_admin.py
-```
-Follow the prompts to set a name, email, and password.
+### 3. Demo Credentials
 
-### 6. Run the app
-```bash
-python app.py
-```
-Visit **http://127.0.0.1:5000** and log in with the admin account you just created.
+| Role | Email | Password |
+|---|---|---|
+| **Admin** | `admin@wellview.com` | `admin123` |
+| **Doctor** | `peter@wellview.com` | `admin123` |
+| **Receptionist** | `jane@wellview.com` | `admin123` |
 
-## Roles and permissions
+---
+
+## Roles and Permissions
 
 | Action | Admin | Receptionist | Doctor |
-|---|---|---|---|
-| View patients/doctors/appointments/billing | ✅ | ✅ | ✅ |
-| Register/edit patients | ✅ | ✅ | ❌ |
+|---|:---:|:---:|:---:|
+| View patients, doctors, appointments, billing | ✅ | ✅ | ✅ |
+| Register / edit patients | ✅ | ✅ | ❌ |
 | Delete patients | ✅ | ❌ | ❌ |
-| Add/remove doctors | ✅ | ❌ | ❌ |
+| Add / remove doctors | ✅ | ❌ | ❌ |
 | Book appointments | ✅ | ✅ | ❌ |
-| Update appointment status | ✅ | ✅ | ✅ |
-| Create/settle bills | ✅ | ✅ | ❌ |
-
-## Security notes (relevant if you're extending this for a security-focused report)
-
-- Passwords are hashed with **bcrypt**, never stored in plain text.
-- All SQL queries use **parameterized statements** (`db.py`) to prevent SQL injection — never string-concatenate user input into a query.
-- Role checks happen server-side via the `@roles_required` decorator in `app.py`, not just hidden in the UI.
-- Sensitive actions (login, record edits/deletes, status changes) are written to the `audit_log` table.
-- Session data is signed using Flask's `SECRET_KEY` — set a strong, random value via environment variable in any real deployment, never hardcode it.
-
-**Still worth doing before treating this as production-ready:**
-- Enforce HTTPS/TLS in front of the app (e.g. via nginx)
-- Add rate-limiting on the login route to slow brute-force attempts
-- Add CSRF protection (e.g. Flask-WTF) on all forms
-- Encrypt highly sensitive fields (like `medical_history`) at rest
-- Add proper logging/monitoring separate from the in-app audit log
+| Update appointment status (Complete/Cancel) | ✅ | ✅ | ✅ |
+| Create & settle bills | ✅ | ✅ | ❌ |
+| Delete bills / appointments | ✅ | ❌ | ❌ |

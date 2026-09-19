@@ -77,6 +77,16 @@ CREATE TABLE IF NOT EXISTS bills (
     FOREIGN KEY (appointment_id) REFERENCES appointments(id) ON DELETE SET NULL
 );
 
+CREATE TABLE IF NOT EXISTS medicines (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(120) NOT NULL,
+    category VARCHAR(80) NOT NULL,
+    dosage VARCHAR(50),
+    stock_quantity INT NOT NULL DEFAULT 0,
+    price DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    expiry_date DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 -- ===================================
 -- Audit log (good practice for a security-focused student to include)
 -- ===================================
